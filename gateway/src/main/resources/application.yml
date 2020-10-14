@@ -1,0 +1,24 @@
+server:
+  port: 9090
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: oauth_token
+          uri: http://127.0.0.1:8000
+          predicates:
+            - Path=/oauth/token
+            - Header=Authorization, .*
+        - id: eBank_individual
+          uri: http://localhost:9101
+          predicates:
+            - Path=/ebank/**
+          filters:
+            - StripPrefix=1
+            - name: Retry
+              args:
+                retries: 2
+
+logging:
+  level:
+    org.springframework: debug
