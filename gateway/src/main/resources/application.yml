@@ -14,15 +14,17 @@ spring:
           predicates:
             - Path=/oauth/token
             - Header=Authorization, .*
-        - id: eBank_individual
-          uri: http://localhost:9101
-          predicates:
-            - Path=/ebank/**
-          filters:
-            - StripPrefix=1
-            - name: Retry
-              args:
-                retries: 2
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            statuses: BAD_GATEWAY
+            methods: GET,POST
+            backoff:
+              firstBackoff: 10ms
+              maxBackoff: 50ms
+              factor: 2
+              basedOnPreviousValue: false
 
 management:
   endpoint:
