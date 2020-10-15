@@ -4,3 +4,7 @@ server:
 spring:
   application:
     name: portal-ebank-individual
+
+logging:
+  level:
+    org.springframework: info

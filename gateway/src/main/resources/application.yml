@@ -9,22 +9,30 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: oauth_token
-          uri: http://127.0.0.1:8000
+        - id: retry_test
+          uri: lb://portal-ebank-individual
           predicates:
-            - Path=/oauth/token
-            - Header=Authorization, .*
-      default-filters:
-        - name: Retry
-          args:
-            retries: 3
-            statuses: BAD_GATEWAY
-            methods: GET,POST
-            backoff:
-              firstBackoff: 10ms
-              maxBackoff: 50ms
-              factor: 2
-              basedOnPreviousValue: false
+            - Path=/ebank/**
+          filters:
+            - name: Retry
+              args:
+                retries: 3
+#                series:
+#                  - SERVER_ERROR
+#                  - CLIENT_ERROR
+                statuses:
+                  - BAD_GATEWAY
+                  - INTERNAL_SERVER_ERROR
+                  - NOT_FOUND
+                methods: GET,POST
+                exceptions:
+                  - java.io.IOException
+                  - java.net.ConnectException
+                backoff:
+                  firstBackoff: 10ms
+                  maxBackoff: 50ms
+                  factor: 2
+                  basedOnPreviousValue: false
 
 management:
   endpoint:
@@ -33,4 +41,5 @@ management:
 
 logging:
   level:
-    org.springframework: debug
+    org.springframework: info
+logging.level.org.springframework.cloud.gateway.filter.factory: TRACE

@@ -3,3 +3,7 @@ server:
 spring:
   application:
     name: service-profile
+
+logging:
+  level:
+    org.springframework: debug
