@@ -4,7 +4,12 @@ server:
 spring:
   application:
     name: portal-ebank-individual
+  cloud:
+    loadbalancer:
+      ribbon:
+        # disable Spring Cloud Netflix Ribbon to enable Spring Cloud LoadBalancer
+        enabled: false
 
 logging:
   level:
-    org.springframework: info
+    org.springframework: debug

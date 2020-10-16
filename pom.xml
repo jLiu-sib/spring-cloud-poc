@@ -11,6 +11,7 @@
 
     <modules>
         <module>gateway</module>
+        <module>rest-client</module>
         <module>portal-ebank-individual</module>
         <module>service-profile</module>
     </modules>
